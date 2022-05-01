@@ -47,6 +47,14 @@ async function run() {
       res.send(result);
     });
 
+    // add product item
+
+    app.post("/additem", async (req, res) => {
+      const addItem = req.body;
+      const result = await wareHouseCollection.insertOne(addItem);
+      res.send(result);
+    });
+
     // update quantity specific  id
 
     app.put("/product/:id", async (req, res) => {
