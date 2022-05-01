@@ -47,6 +47,23 @@ async function run() {
       res.send(result);
     });
 
+    // get data to server spesific email
+
+    app.get("/product", async (req, res) => {
+      const decodedEmail = req.decoded.email;
+      const email = req.query.email;
+
+      if (decodedEmail === email) {
+        const query = { email: email };
+        const cursor = wareHouseCollection.find(query);
+        const result = await cursor.toArray();
+        console.log(result);
+        res.send(result);
+      } else {
+        res.status(404).send({ message: "forbedden access" });
+      }
+    });
+
     // add product item
 
     app.post("/additem", async (req, res) => {
