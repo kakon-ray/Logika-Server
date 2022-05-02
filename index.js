@@ -87,7 +87,7 @@ async function run() {
       res.send(result);
     });
 
-    // delete data and item spesific id
+    // delete spesific item spesific id
     app.delete("/product/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
