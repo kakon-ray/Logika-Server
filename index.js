@@ -49,19 +49,12 @@ async function run() {
 
     // get data to server spesific email
 
-    app.get("/product", async (req, res) => {
-      const decodedEmail = req.decoded.email;
+    app.get("/useritem", async (req, res) => {
       const email = req.query.email;
-
-      if (decodedEmail === email) {
-        const query = { email: email };
-        const cursor = wareHouseCollection.find(query);
-        const result = await cursor.toArray();
-        console.log(result);
-        res.send(result);
-      } else {
-        res.status(404).send({ message: "forbedden access" });
-      }
+      const query = { email: email };
+      const cursor = wareHouseCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
     });
 
     // add product item
