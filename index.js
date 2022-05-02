@@ -45,11 +45,19 @@ async function run() {
       res.send(wareHouseProduct);
     });
 
-    // get data to database spesific id
+    // get data to database spesific id product (wareHouseProduct)
     app.get("/product/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await wareHouseCollection.findOne(query);
+      res.send(result);
+    });
+
+    // get data to database spesific id product (usercollection)
+    app.get("/userproduct/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection.findOne(query);
       res.send(result);
     });
 
