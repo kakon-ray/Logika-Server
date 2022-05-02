@@ -47,7 +47,7 @@ async function run() {
       res.send(result);
     });
 
-    // get data server spesific email/////////////////////
+    // get data server spesific email
 
     app.get("/userorder", async (req, res) => {
       const email = req.query.email;
