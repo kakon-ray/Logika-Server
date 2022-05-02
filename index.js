@@ -49,7 +49,7 @@ async function run() {
 
     // get data server spesific email/////////////////////
 
-    app.get("/product/:email", async (req, res) => {
+    app.get("/userorder", async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
       const cursor = wareHouseCollection.find(query);
