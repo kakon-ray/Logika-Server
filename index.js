@@ -32,14 +32,14 @@ async function run() {
         .collection("warehouseProduct");
     });
 
-    // get data server and send client side
+    // get data database and send client side
     app.get("/product", async (req, res) => {
       const query = {};
       const cursor = wareHouseCollection.find(query);
       const wareHouseProduct = await cursor.toArray();
       res.send(wareHouseProduct);
     });
-    // get data to server spesific id
+    // get data to database spesific id
     app.get("/product/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -47,9 +47,9 @@ async function run() {
       res.send(result);
     });
 
-    // get data to server spesific email
+    // get data server spesific email/////////////////////
 
-    app.get("/useritem", async (req, res) => {
+    app.get("/product/:email", async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
       const cursor = wareHouseCollection.find(query);
