@@ -18,10 +18,15 @@ var uri = `mongodb://${process.env.LOGIKA_USER}:${process.env.LOGIKA_PASS}@clust
 async function run() {
   try {
     let wareHouseCollection;
-    await MongoClient.connect(uri, function (err, client) {
+    MongoClient.connect(uri, function (err, client) {
       wareHouseCollection = client
         .db("warehouse")
         .collection("warehouseProduct");
+    });
+
+    let userCollection;
+    MongoClient.connect(uri, function (err, client) {
+      userCollection = client.db("warehouse").collection("userProduct");
     });
 
     // get data database and send client side
@@ -31,6 +36,15 @@ async function run() {
       const wareHouseProduct = await cursor.toArray();
       res.send(wareHouseProduct);
     });
+
+    // get data database all user product
+    app.get("/userproduct", async (req, res) => {
+      const query = {};
+      const cursor = userCollection.find(query);
+      const wareHouseProduct = await cursor.toArray();
+      res.send(wareHouseProduct);
+    });
+
     // get data to database spesific id
     app.get("/product/:id", async (req, res) => {
       const id = req.params.id;
@@ -44,16 +58,23 @@ async function run() {
     app.get("/userorder", async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
-      const cursor = wareHouseCollection.find(query);
+      const cursor = userCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
     });
 
-    // add product item
-
+    // add a item to main product collection
     app.post("/product", async (req, res) => {
       const addItem = req.body;
       const result = await wareHouseCollection.insertOne(addItem);
+      res.send(result);
+    });
+
+    // add a item to usercollection
+
+    app.post("/userproduct", async (req, res) => {
+      const addItem = req.body;
+      const result = await userCollection.insertOne(addItem);
       res.send(result);
     });
 
@@ -79,11 +100,19 @@ async function run() {
       res.send(result);
     });
 
-    // delete spesific item spesific id
-    app.delete("/product/:id", async (req, res) => {
+    // delete spesific item spesific id product (wareHouseCollection)
+    app.delete("/userproduct/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await wareHouseCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // delete spesific item spesific id product (usercollection)
+    app.delete("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
       res.send(result);
     });
   } finally {
