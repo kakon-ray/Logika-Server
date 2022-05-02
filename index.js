@@ -13,14 +13,6 @@ const ObjectId = require("mongodb").ObjectId;
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Node server is running");
-});
-
-app.listen(port, () => {
-  console.log("Node server is running");
-});
-
 var uri = `mongodb://${process.env.LOGIKA_USER}:${process.env.LOGIKA_PASS}@cluster0-shard-00-00.fx0p5.mongodb.net:27017,cluster0-shard-00-01.fx0p5.mongodb.net:27017,cluster0-shard-00-02.fx0p5.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-11zqww-shard-0&authSource=admin&retryWrites=true&w=majority`;
 
 async function run() {
@@ -99,3 +91,12 @@ async function run() {
 }
 
 run().catch(console.dir());
+
+app.get("/", (req, res) => {
+  res.send("Running ginius server");
+});
+
+// db users
+app.listen(port, () => {
+  console.log(`CROUD server is Running ${port}`);
+});
