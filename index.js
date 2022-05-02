@@ -26,7 +26,7 @@ var uri = `mongodb://${process.env.LOGIKA_USER}:${process.env.LOGIKA_PASS}@clust
 async function run() {
   try {
     let wareHouseCollection;
-    MongoClient.connect(uri, function (err, client) {
+    await MongoClient.connect(uri, function (err, client) {
       wareHouseCollection = client
         .db("warehouse")
         .collection("warehouseProduct");
