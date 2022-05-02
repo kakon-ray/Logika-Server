@@ -101,7 +101,7 @@ async function run() {
     });
 
     // delete spesific item spesific id product (wareHouseCollection)
-    app.delete("/userproduct/:id", async (req, res) => {
+    app.delete("/product/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await wareHouseCollection.deleteOne(query);
@@ -109,7 +109,7 @@ async function run() {
     });
 
     // delete spesific item spesific id product (usercollection)
-    app.delete("/product/:id", async (req, res) => {
+    app.delete("/userproduct/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await userCollection.deleteOne(query);
