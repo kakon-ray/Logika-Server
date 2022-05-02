@@ -32,7 +32,7 @@ async function run() {
         .collection("warehouseProduct");
     });
 
-    // get data to server and send client side
+    // get data server and send client side
     app.get("/product", async (req, res) => {
       const query = {};
       const cursor = wareHouseCollection.find(query);
