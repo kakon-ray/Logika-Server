@@ -3,7 +3,6 @@ require("dotenv").config();
 const cors = require("cors");
 var MongoClient = require("mongodb").MongoClient;
 const app = express();
-
 const port = process.env.PORT || 5000;
 const ObjectId = require("mongodb").ObjectId;
 // username: admin
@@ -136,4 +135,8 @@ app.get("/", (req, res) => {
 // db users
 app.listen(port, () => {
   console.log(`CROUD server is Running ${port}`);
+});
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
 });
