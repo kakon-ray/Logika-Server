@@ -13,6 +13,24 @@ const ObjectId = require("mongodb").ObjectId;
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("Running ginius server");
+});
+
+// db users
+app.listen(port, () => {
+  console.log(`CROUD server is Running ${port}`);
+});
+
+// CORS Error solve
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "application/json");
+  res.header("Access-Control-Allow-Credentials", true);
+  next();
+});
+
 // veryfy jwt token
 function veryfyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -161,21 +179,3 @@ async function run() {
 }
 
 run().catch(console.dir());
-
-app.get("/", (req, res) => {
-  res.send("Running ginius server");
-});
-
-// db users
-app.listen(port, () => {
-  console.log(`CROUD server is Running ${port}`);
-});
-
-// CORS Error solve
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.header("Access-Control-Allow-Headers", "application/json");
-  res.header("Access-Control-Allow-Credentials", true);
-  next();
-});
