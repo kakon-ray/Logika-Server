@@ -2,7 +2,7 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-var MongoClient = require("mongodb").MongoClient;
+const { MongoClient, ServerApiVersion } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
 const ObjectId = require("mongodb").ObjectId;
@@ -31,21 +31,20 @@ function veryfyJWT(req, res, next) {
   });
 }
 
-var uri = `mongodb://${process.env.LOGIKA_USER}:${process.env.LOGIKA_PASS}@cluster0-shard-00-00.fx0p5.mongodb.net:27017,cluster0-shard-00-01.fx0p5.mongodb.net:27017,cluster0-shard-00-02.fx0p5.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-11zqww-shard-0&authSource=admin&retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.LOGIKA_USER}:${process.env.LOGIKA_PASS}@cluster0.fx0p5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
+});
 
 async function run() {
   try {
-    let wareHouseCollection;
-    MongoClient.connect(uri, function (err, client) {
-      wareHouseCollection = client
-        .db("warehouse")
-        .collection("warehouseProduct");
-    });
-
-    let userCollection;
-    MongoClient.connect(uri, function (err, client) {
-      userCollection = client.db("warehouse").collection("userProduct");
-    });
+    await client.connect();
+    const wareHouseCollection = client
+      .db("warehouse")
+      .collection("warehouseProduct");
+    const userCollection = client.db("warehouse").collection("userProduct");
 
     //SEND JWT WEB TOKEN LOGIN AND REGISTATION COMPONENT
 
