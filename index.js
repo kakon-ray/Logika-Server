@@ -27,9 +27,8 @@ function veryfyJWT(req, res, next) {
       return res.status(403).send({ message: "Forbidden Access" });
     }
     req.decoded = decoded;
+    next();
   });
-
-  next();
 }
 
 var uri = `mongodb://${process.env.LOGIKA_USER}:${process.env.LOGIKA_PASS}@cluster0-shard-00-00.fx0p5.mongodb.net:27017,cluster0-shard-00-01.fx0p5.mongodb.net:27017,cluster0-shard-00-02.fx0p5.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-11zqww-shard-0&authSource=admin&retryWrites=true&w=majority`;
