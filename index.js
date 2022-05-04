@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
 var MongoClient = require("mongodb").MongoClient;
 const app = express();
 const port = process.env.PORT || 5000;
@@ -11,6 +12,25 @@ const ObjectId = require("mongodb").ObjectId;
 // middleware
 app.use(cors());
 app.use(express.json());
+
+// veryfy jwt token
+function veryfyJWT(req, res, next) {
+  const authHeader = req.headers.authorization;
+  // console.log("Inside varify jwt", authHeader);
+  if (!authHeader) {
+    return res.status(401).send({ message: "Unauthorized Access" });
+  }
+  const token = authHeader.split(" ")[1];
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
+    if (error) {
+      return res.status(403).send({ message: "Forbidden Access" });
+    }
+    req.decoded = decoded;
+  });
+
+  next();
+}
 
 var uri = `mongodb://${process.env.LOGIKA_USER}:${process.env.LOGIKA_PASS}@cluster0-shard-00-00.fx0p5.mongodb.net:27017,cluster0-shard-00-01.fx0p5.mongodb.net:27017,cluster0-shard-00-02.fx0p5.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-11zqww-shard-0&authSource=admin&retryWrites=true&w=majority`;
 
@@ -26,6 +46,16 @@ async function run() {
     let userCollection;
     MongoClient.connect(uri, function (err, client) {
       userCollection = client.db("warehouse").collection("userProduct");
+    });
+
+    //SEND JWT WEB TOKEN LOGIN AND REGISTATION COMPONENT
+
+    app.post("/login", async (req, res) => {
+      const user = req.body;
+      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "1d",
+      });
+      res.send({ accessToken });
     });
 
     // get data database and send client side
@@ -60,14 +90,20 @@ async function run() {
       res.send(result);
     });
 
-    // get data server spesific  email(usercollection)
+    // get data server spesific  email(usercollection) AND VERYFY JWT TOKEN
 
-    app.get("/userorder", async (req, res) => {
+    app.get("/userorder", veryfyJWT, async (req, res) => {
+      const decodedEmail = req.decoded.email;
       const email = req.query.email;
-      const query = { email: email };
-      const cursor = userCollection.find(query);
-      const result = await cursor.toArray();
-      res.send(result);
+
+      if (decodedEmail === email) {
+        const query = { email: email };
+        const cursor = userCollection.find(query);
+        const result = await cursor.toArray();
+        res.send(result);
+      } else {
+        res.status(403).send({ message: "Forbidden Access" });
+      }
     });
 
     // add a item to main product collection
