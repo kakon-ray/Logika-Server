@@ -98,6 +98,14 @@ async function run() {
       res.send(wareHouseProduct);
     });
 
+    // Create Product count api and get all data count
+    app.get("/productcount", async (req, res) => {
+      const query = {};
+      const cursor = wareHouseCollection.find(query);
+      const count = await cursor.count();
+      res.send({ count });
+    });
+
     // get data to database spesific id product (wareHouseProduct)
     app.get("/product/:id", async (req, res) => {
       const id = req.params.id;
