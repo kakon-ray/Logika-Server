@@ -82,6 +82,14 @@ async function run() {
       res.send(wareHouseProduct);
     });
 
+    // get data database and send client side limited item
+    app.get("/homeproduct", async (req, res) => {
+      const query = {};
+      const cursor = wareHouseCollection.find(query);
+      const wareHouseProduct = await cursor.limit(6).toArray();
+      res.send(wareHouseProduct);
+    });
+
     // get data database all user product
     app.get("/userproduct", async (req, res) => {
       const query = {};
