@@ -74,11 +74,23 @@ async function run() {
       res.send({ accessToken });
     });
 
-    // get data database and send client side
+    // get data database and send client side and pagination
     app.get("/product", async (req, res) => {
+      console.log(req.query);
+      const page = parseInt(req.query.page);
+      const size = parseInt(req.query.size);
       const query = {};
       const cursor = wareHouseCollection.find(query);
-      const wareHouseProduct = await cursor.toArray();
+      let wareHouseProduct;
+      if (page || size) {
+        wareHouseProduct = await cursor
+          .skip(page * size)
+          .limit(size)
+          .toArray();
+      } else {
+        wareHouseProduct = await cursor.toArray();
+      }
+
       res.send(wareHouseProduct);
     });
 
