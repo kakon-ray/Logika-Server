@@ -102,7 +102,7 @@ async function run() {
       res.send(wareHouseProduct);
     });
 
-    // get data database all user product
+    // get data database all user
     app.get("/userproduct", async (req, res) => {
       const query = {};
       const cursor = userCollection.find(query);
