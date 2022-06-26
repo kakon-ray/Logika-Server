@@ -6,8 +6,6 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
 const ObjectId = require("mongodb").ObjectId;
-// username: admin
-// password: 6iA57hoatUuBpTKZ
 
 // middleware
 app.use(cors());
